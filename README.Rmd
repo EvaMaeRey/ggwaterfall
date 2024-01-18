@@ -270,6 +270,31 @@ last_plot() +
   aes(x = fct_reorder(event, abs(change))) # in order magnitude
 ```  
 
+## A non monetary example... 
+
+We can also think about things that 'fill us up' or don't.   Here's an example about building packages... 
+
+```{r}
+tibble::tribble(~activity, ~change,
+  "writing functions :-)", 50,
+  "trying functions out :-)", 180,
+  "writing formal tests :-(", -120
+  ) |>
+ggplot() + 
+  aes(x = activity %>% 
+        str_wrap(12) %>% 
+        fct_inorder(), change = change) + 
+  geom_waterfall(show.legend = F) + 
+  geom_waterfall_label(aes(label = ifelse(change < 0, 
+                       "tedious", 
+                       "delightful")), size = 5) +
+  labs(title = "What affect do the develpment activities\nhave on your mood and energy?") + 
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = .2) +
+  
+  theme_minimal(base_size = 15)
+```
+
+
 # Part II. Packaging and documentation  🚧 ✅ 
 
 ## Phase 1. Minimal working package

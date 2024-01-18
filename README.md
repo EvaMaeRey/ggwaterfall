@@ -13,6 +13,7 @@
         ggproto](#step-1--2-write-compute-functions-and-pass-to-ggproto)
       - [Step 3. pass to geom\_ / stat\_](#step-3-pass-to-geom_--stat_)
       - [Step 4. Enjoy (test)](#step-4-enjoy-test)
+      - [A non monetary example…](#a-non-monetary-example)
   - [Part II. Packaging and documentation 🚧
     ✅](#part-ii-packaging-and-documentation--)
       - [Phase 1. Minimal working
@@ -350,6 +351,33 @@ last_plot() +
 
 ![](README_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
 
+## A non monetary example…
+
+We can also think about things that ‘fill us up’ or don’t. Here’s an
+example about building packages…
+
+``` r
+tibble::tribble(~activity, ~change,
+  "writing functions :-)", 50,
+  "trying functions out :-)", 180,
+  "writing formal tests :-(", -120
+  ) |>
+ggplot() + 
+  aes(x = activity %>% 
+        str_wrap(12) %>% 
+        fct_inorder(), change = change) + 
+  geom_waterfall(show.legend = F) + 
+  geom_waterfall_label(aes(label = ifelse(change < 0, 
+                       "tedious", 
+                       "delightful")), size = 5) +
+  labs(title = "What affect do the develpment activities\nhave on your mood and energy?") + 
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = .2) +
+  
+  theme_minimal(base_size = 15)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
 # Part II. Packaging and documentation 🚧 ✅
 
 ## Phase 1. Minimal working package
@@ -366,9 +394,10 @@ knitr::knit_code$get() |> names()
 #>  [7] "unnamed-chunk-4"           "unnamed-chunk-5"          
 #>  [9] "unnamed-chunk-6"           "unnamed-chunk-7"          
 #> [11] "unnamed-chunk-8"           "unnamed-chunk-9"          
-#> [13] "unnamed-chunk-10"          "test_calc_frequency_works"
-#> [15] "unnamed-chunk-11"          "unnamed-chunk-12"         
-#> [17] "unnamed-chunk-13"          "unnamed-chunk-14"
+#> [13] "unnamed-chunk-10"          "unnamed-chunk-11"         
+#> [15] "test_calc_frequency_works" "unnamed-chunk-12"         
+#> [17] "unnamed-chunk-13"          "unnamed-chunk-14"         
+#> [19] "unnamed-chunk-15"
 ```
 
 Use new {readme2pkg} function to do this from readme…
